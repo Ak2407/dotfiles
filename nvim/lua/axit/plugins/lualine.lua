@@ -1,0 +1,53 @@
+return {
+	"nvim-lualine/lualine.nvim",
+	dependencies = { "nvim-tree/nvim-web-devicons" },
+	config = function()
+		local lualine = require("lualine")
+		local lazy_status = require("lazy.status")
+
+		local colors = {
+			blue = "#65D1FF",
+			green = "#3EFFDC",
+			violet = "#FF61EF",
+			yellow = "#FFDA7B",
+			red = "#FF4A4A",
+			fg = "#c3ccdc",
+			bg = "#112638",
+			inactive_bg = "#2c3043",
+			semilightgray = "#6d6d6d",
+		}
+
+		local my_lualine_theme = {
+			normal = {
+				a = { bg = colors.blue, fg = colors.bg, gui = "bold" },
+				b = { bg = colors.bg, fg = colors.fg },
+				c = { bg = colors.bg, fg = colors.fg },
+			},
+			-- ... (other modes)
+			inactive = {
+				a = { bg = colors.inactive_bg, fg = colors.semilightgray, gui = "bold" },
+				b = { bg = colors.inactive_bg, fg = colors.semilightgray },
+				c = { bg = colors.inactive_bg, fg = colors.semilightgray },
+			},
+		}
+
+		lualine.setup({
+			options = {
+				theme = my_lualine_theme,
+			},
+			sections = {
+				lualine_c = { "%f" }, -- Use %f for the relative file path
+				lualine_x = {
+					{
+						lazy_status.updates,
+						cond = lazy_status.has_updates,
+						color = { fg = "#ff9e64" },
+					},
+					{ "encoding" },
+					{ "fileformat" },
+					{ "filetype" },
+				},
+			},
+		})
+	end,
+}
